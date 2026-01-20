@@ -1,4 +1,5 @@
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { LanguageProvider } from './context/LanguageContext';
 import Login from './pages/Login';
 import Questionario from './pages/Questionario';
 import AdminDashboard from './pages/AdminDashboard';
@@ -13,5 +14,11 @@ function AppContent() {
 }
 
 export default function App() {
-    return <AuthProvider><AppContent /></AuthProvider>;
+    return (
+        <LanguageProvider>
+            <AuthProvider>
+                <AppContent />
+            </AuthProvider>
+        </LanguageProvider>
+    );
 }

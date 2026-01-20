@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { adminAPI } from '../services/api';
+import { useLanguage } from '../context/LanguageContext';
 import Header from '../components/Header';
 
 export default function AdminDashboard() {
+    const { t } = useLanguage();
     const [operadores, setOperadores] = useState([]);
     const [stats, setStats] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -137,31 +139,31 @@ export default function AdminDashboard() {
             <main className="main-content">
                 <div style={{ marginBottom: '2rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
                     <div>
-                        <h1>Dashboard Administrativo</h1>
-                        <p style={{ color: 'var(--neutral-400)' }}>Gerencie operadores e visualize status</p>
+                        <h1>{t('admin.title')}</h1>
+                        <p style={{ color: 'var(--neutral-400)' }}>{t('admin.subtitle')}</p>
                     </div>
                     <div style={{ display: 'flex', gap: '0.75rem' }}>
                         <button className="btn btn-success" onClick={() => setShowCreateModal(true)}>
-                            ➕ Novo Operador
+                            ➕ {t('admin.newOperator')}
                         </button>
                         <button className="btn btn-primary" onClick={exportAllCSV}>
-                            📊 Exportar CSV
+                            📊 {t('admin.exportCSV')}
                         </button>
                     </div>
                 </div>
 
                 <div className="stats-grid">
-                    <div className="stat-card"><div className="stat-icon" style={{ background: 'linear-gradient(135deg, #3b82f6, #60a5fa)' }}>👥</div><div><div className="stat-value">{stats?.total_operadores || 0}</div><div className="stat-label">Operadores</div></div></div>
-                    <div className="stat-card"><div className="stat-icon" style={{ background: 'linear-gradient(135deg, #10b981, #34d399)' }}>✓</div><div><div className="stat-value">{stats?.finalizados || 0}</div><div className="stat-label">Finalizados</div></div></div>
-                    <div className="stat-card"><div className="stat-icon" style={{ background: 'linear-gradient(135deg, #f59e0b, #fbbf24)' }}>⏳</div><div><div className="stat-value">{stats?.em_andamento || 0}</div><div className="stat-label">Em Andamento</div></div></div>
-                    <div className="stat-card"><div className="stat-icon" style={{ background: 'linear-gradient(135deg, #ef4444, #f87171)' }}>⚠️</div><div><div className="stat-value">{stats?.alertas_criticos || 0}</div><div className="stat-label">Alertas</div></div></div>
+                    <div className="stat-card"><div className="stat-icon" style={{ background: 'linear-gradient(135deg, #3b82f6, #60a5fa)' }}>👥</div><div><div className="stat-value">{stats?.total_operadores || 0}</div><div className="stat-label">{t('admin.operators')}</div></div></div>
+                    <div className="stat-card"><div className="stat-icon" style={{ background: 'linear-gradient(135deg, #10b981, #34d399)' }}>✓</div><div><div className="stat-value">{stats?.finalizados || 0}</div><div className="stat-label">{t('admin.finalized')}</div></div></div>
+                    <div className="stat-card"><div className="stat-icon" style={{ background: 'linear-gradient(135deg, #f59e0b, #fbbf24)' }}>⏳</div><div><div className="stat-value">{stats?.em_andamento || 0}</div><div className="stat-label">{t('admin.inProgress')}</div></div></div>
+                    <div className="stat-card"><div className="stat-icon" style={{ background: 'linear-gradient(135deg, #ef4444, #f87171)' }}>⚠️</div><div><div className="stat-value">{stats?.alertas_criticos || 0}</div><div className="stat-label">{t('admin.alerts')}</div></div></div>
                 </div>
 
                 <div className="card">
-                    <div className="card-header"><h2 className="card-title">Operadores</h2><span className="badge badge-neutral">{operadores.length}</span></div>
+                    <div className="card-header"><h2 className="card-title">{t('admin.operators')}</h2><span className="badge badge-neutral">{operadores.length}</span></div>
                     <div className="table-container">
                         <table className="table">
-                            <thead><tr><th>Empresa</th><th>Email</th><th>Status</th><th>Progresso</th><th>Ações</th></tr></thead>
+                            <thead><tr><th>{t('admin.company')}</th><th>{t('admin.email')}</th><th>{t('admin.status')}</th><th>{t('admin.progress')}</th><th>{t('admin.actions')}</th></tr></thead>
                             <tbody>
                                 {operadores.map(op => (
                                     <tr key={op.id}>
