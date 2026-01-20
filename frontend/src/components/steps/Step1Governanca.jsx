@@ -14,10 +14,31 @@ export default function Step1Governanca({ data, updateData, disabled }) {
             </div>
             <div className="step-section">
                 <h3 className="step-section-title">Data Protection Officer (DPO)</h3>
-                <div className="form-row">
-                    <div className="form-group"><label className="form-label required">Nome do DPO</label><input type="text" name="dpo_nome" className="form-input" value={formData.dpo_nome || ''} onChange={handleChange} disabled={disabled} /></div>
-                    <div className="form-group"><label className="form-label required">Email do DPO</label><input type="email" name="dpo_email" className="form-input" value={formData.dpo_email || ''} onChange={handleChange} disabled={disabled} /></div>
+                <div className="form-group">
+                    <label className="form-label required">A empresa possui DPO designado?</label>
+                    <div className="radio-group-horizontal">
+                        <label className="form-check">
+                            <input type="radio" name="possui_dpo" value="sim" checked={formData.possui_dpo === 'sim'} onChange={handleChange} disabled={disabled} className="form-check-input" />
+                            <span className="form-check-label">Sim</span>
+                        </label>
+                        <label className="form-check">
+                            <input type="radio" name="possui_dpo" value="nao" checked={formData.possui_dpo === 'nao'} onChange={handleChange} disabled={disabled} className="form-check-input" />
+                            <span className="form-check-label">Não</span>
+                        </label>
+                    </div>
                 </div>
+                {formData.possui_dpo === 'sim' && (
+                    <div className="form-row" style={{ marginTop: '1rem', animation: 'fadeIn 0.3s ease-in-out' }}>
+                        <div className="form-group">
+                            <label className="form-label required">Nome do DPO</label>
+                            <input type="text" name="dpo_nome" className="form-input" placeholder="Nome completo do DPO" value={formData.dpo_nome || ''} onChange={handleChange} disabled={disabled} />
+                        </div>
+                        <div className="form-group">
+                            <label className="form-label required">Email do DPO</label>
+                            <input type="email" name="dpo_email" className="form-input" placeholder="email@empresa.com" value={formData.dpo_email || ''} onChange={handleChange} disabled={disabled} />
+                        </div>
+                    </div>
+                )}
             </div>
             <div className="step-section">
                 <h3 className="step-section-title">Políticas</h3>
