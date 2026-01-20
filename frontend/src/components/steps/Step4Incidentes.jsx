@@ -10,11 +10,6 @@ export default function Step4Incidentes({ data, updateData, disabled }) {
                     <label className="form-check"><input type="radio" name="plano_documentado" value="sim" checked={formData.plano_documentado === 'sim'} onChange={handleChange} disabled={disabled} className="form-check-input" /><span className="form-check-label">Sim</span></label>
                     <label className="form-check"><input type="radio" name="plano_documentado" value="nao" checked={formData.plano_documentado === 'nao'} onChange={handleChange} disabled={disabled} className="form-check-input" /><span className="form-check-label">Não</span></label>
                 </div></div>
-                <div className="form-group"><label className="form-label required">Tempo máximo para notificação à ANPD (horas)</label>
-                    <input type="number" name="tempo_notificacao_horas" className="form-input" placeholder="Ex: 24" min="1" max="168" value={formData.tempo_notificacao_horas || ''} onChange={handleChange} disabled={disabled} />
-                    <span className="form-hint">⚠️ Recomendado: 24-48 horas</span>
-                    {formData.tempo_notificacao_horas > 48 && <div className="alert alert-warning" style={{ marginTop: '0.5rem' }}><span>⚠️</span><span>Tempo acima do recomendado!</span></div>}
-                </div>
             </div>
             <div className="step-section">
                 <h3 className="step-section-title">Continuidade de Negócios</h3>
@@ -31,7 +26,7 @@ export default function Step4Incidentes({ data, updateData, disabled }) {
             </div>
             <div className="step-section">
                 <h3 className="step-section-title">Equipe e Seguros</h3>
-                <div className="form-group"><label className="form-label">Possui equipe CSIRT?</label><div className="radio-group-horizontal">
+                <div className="form-group"><label className="form-label">Possui equipe de resposta a incidentes?</label><div className="radio-group-horizontal">
                     <label className="form-check"><input type="radio" name="csirt_existe" value="sim" checked={formData.csirt_existe === 'sim'} onChange={handleChange} disabled={disabled} className="form-check-input" /><span className="form-check-label">Sim</span></label>
                     <label className="form-check"><input type="radio" name="csirt_existe" value="nao" checked={formData.csirt_existe === 'nao'} onChange={handleChange} disabled={disabled} className="form-check-input" /><span className="form-check-label">Não</span></label>
                 </div></div>
