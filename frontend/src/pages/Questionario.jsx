@@ -6,22 +6,20 @@ import Step1Governanca from '../components/steps/Step1Governanca';
 import Step2Seguranca from '../components/steps/Step2Seguranca';
 import Step3CicloVida from '../components/steps/Step3CicloVida';
 import Step4Incidentes from '../components/steps/Step4Incidentes';
-import Step5Apostas from '../components/steps/Step5Apostas';
-import Step6Desenvolvimento from '../components/steps/Step6Desenvolvimento';
-import Step7RH from '../components/steps/Step7RH';
-import Step8Integridade from '../components/steps/Step8Integridade';
-import Step9Upload from '../components/steps/Step9Upload';
+import Step5Desenvolvimento from '../components/steps/Step6Desenvolvimento';
+import Step6RH from '../components/steps/Step7RH';
+import Step7Integridade from '../components/steps/Step8Integridade';
+import Step8Upload from '../components/steps/Step9Upload';
 
 const STEPS = [
     { id: 1, title: 'Governança', component: Step1Governanca },
     { id: 2, title: 'Segurança', component: Step2Seguranca },
     { id: 3, title: 'Ciclo de Vida', component: Step3CicloVida },
     { id: 4, title: 'Incidentes', component: Step4Incidentes },
-    { id: 5, title: 'Apostas & KYC', component: Step5Apostas },
-    { id: 6, title: 'SDLC & IA', component: Step6Desenvolvimento },
-    { id: 7, title: 'RH & Auditoria', component: Step7RH },
-    { id: 8, title: 'Integridade', component: Step8Integridade },
-    { id: 9, title: 'Arquivos', component: Step9Upload },
+    { id: 5, title: 'SDLC & IA', component: Step5Desenvolvimento },
+    { id: 6, title: 'RH & Auditoria', component: Step6RH },
+    { id: 7, title: 'Integridade', component: Step7Integridade },
+    { id: 8, title: 'Arquivos', component: Step8Upload },
 ];
 
 export default function Questionario() {
@@ -30,7 +28,7 @@ export default function Questionario() {
     const [saving, setSaving] = useState(false);
     const [message, setMessage] = useState({ type: '', text: '' });
     const [respostas, setRespostas] = useState(null);
-    const [formData, setFormData] = useState({ governanca: {}, seguranca: {}, ciclo_vida: {}, incidentes: {}, apostas: {}, desenvolvimento: {}, rh: {}, integridade: {} });
+    const [formData, setFormData] = useState({ governanca: {}, seguranca: {}, ciclo_vida: {}, incidentes: {}, desenvolvimento: {}, rh: {}, integridade: {} });
 
     useEffect(() => { loadRespostas(); }, []);
 
@@ -41,7 +39,7 @@ export default function Questionario() {
             setFormData({
                 governanca: data.secao_1_governanca || {}, seguranca: data.secao_2_seguranca || {},
                 ciclo_vida: data.secao_3_ciclo_vida || {}, incidentes: data.secao_4_incidentes || {},
-                apostas: data.secao_5_apostas || {}, desenvolvimento: data.secao_6_desenvolvimento || {},
+                desenvolvimento: data.secao_6_desenvolvimento || {},
                 rh: data.secao_7_rh || {}, integridade: data.secao_9_integridade || {}
             });
         } catch (error) { showMessage('danger', 'Erro ao carregar'); }
@@ -54,7 +52,7 @@ export default function Questionario() {
     const saveCurrentStep = async () => {
         setSaving(true);
         try {
-            const sectionMap = { 1: 'governanca', 2: 'seguranca', 3: 'ciclo_vida', 4: 'incidentes', 5: 'apostas', 6: 'desenvolvimento', 7: 'rh', 8: 'integridade' };
+            const sectionMap = { 1: 'governanca', 2: 'seguranca', 3: 'ciclo_vida', 4: 'incidentes', 5: 'desenvolvimento', 6: 'rh', 7: 'integridade' };
             const section = sectionMap[currentStep];
             if (section) await respostasAPI.saveSecao(currentStep, formData[section]);
             showMessage('success', 'Salvo!');
