@@ -4,7 +4,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 export default function Login() {
     const { login } = useAuth();
-    const { language, toggleLanguage, t } = useLanguage();
+    const { language, setLanguage, t } = useLanguage();
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({ email: '', password: '' });
@@ -24,27 +24,23 @@ export default function Login() {
 
     return (
         <div className="login-container">
-            <div className="login-card">
-                {/* Language toggle */}
-                <div style={{ position: 'absolute', top: '1rem', right: '1rem' }}>
-                    <button
-                        className="btn btn-ghost lang-toggle"
-                        onClick={toggleLanguage}
-                        title={language === 'pt-BR' ? 'Switch to English' : 'Mudar para Português'}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            padding: '0.5rem 0.75rem',
-                            borderRadius: '8px',
-                            fontWeight: 600
-                        }}
-                    >
-                        <span style={{ fontSize: '1.25rem' }}>{language === 'pt-BR' ? '🇧🇷' : '🇺🇸'}</span>
-                        <span>{language === 'pt-BR' ? 'PT' : 'EN'}</span>
-                    </button>
-                </div>
+            {/* Language Switcher - floating */}
+            <div className="lang-switcher-float">
+                <button
+                    className={`lang-btn ${language === 'pt-BR' ? 'active' : ''}`}
+                    onClick={() => setLanguage('pt-BR')}
+                >
+                    🇧🇷 Português
+                </button>
+                <button
+                    className={`lang-btn ${language === 'en-US' ? 'active' : ''}`}
+                    onClick={() => setLanguage('en-US')}
+                >
+                    🇺🇸 English
+                </button>
+            </div>
 
+            <div className="login-card">
                 <div className="login-header">
                     <div className="login-logo">
                         <div className="login-logo-icon">DD</div>

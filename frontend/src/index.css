@@ -739,3 +739,64 @@ a {
     cursor: pointer;
     margin-left: 0.5rem;
 }
+
+/* Language Switcher Styles */
+.lang-switcher {
+    display: flex;
+    gap: 0.5rem;
+    margin-right: 1rem;
+}
+
+.lang-switcher-float {
+    position: fixed;
+    top: 1.5rem;
+    right: 1.5rem;
+    display: flex;
+    gap: 0.5rem;
+    z-index: 100;
+}
+
+.lang-btn {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.625rem 1rem;
+    border-radius: 0.75rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 2px solid transparent;
+    background: rgba(30, 41, 59, 0.8);
+    color: var(--neutral-400);
+}
+
+.lang-btn:hover {
+    background: rgba(59, 130, 246, 0.2);
+    color: var(--neutral-200);
+    border-color: rgba(59, 130, 246, 0.3);
+}
+
+.lang-btn.active {
+    background: linear-gradient(135deg, rgba(59, 130, 246, 0.3), rgba(6, 182, 212, 0.2));
+    color: white;
+    border-color: var(--primary-500);
+    box-shadow: 0 0 20px rgba(59, 130, 246, 0.3);
+}
+
+@media (max-width: 768px) {
+    .lang-switcher {
+        gap: 0.25rem;
+        margin-right: 0.5rem;
+    }
+
+    .lang-btn {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.8125rem;
+    }
+
+    .lang-switcher-float {
+        top: 1rem;
+        right: 1rem;
+    }
+}

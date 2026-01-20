@@ -3,7 +3,7 @@ import { useLanguage } from '../context/LanguageContext';
 
 export default function Header() {
     const { user, logout } = useAuth();
-    const { language, toggleLanguage, t } = useLanguage();
+    const { language, setLanguage, t } = useLanguage();
 
     return (
         <header className="header">
@@ -13,23 +13,21 @@ export default function Header() {
                     <span className="header-logo-text">{t('header.title')}</span>
                 </div>
                 <nav className="header-nav">
-                    {/* Language Toggle */}
-                    <button
-                        className="btn btn-ghost lang-toggle"
-                        onClick={toggleLanguage}
-                        title={language === 'pt-BR' ? 'Switch to English' : 'Mudar para Português'}
-                        style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            padding: '0.5rem 0.75rem',
-                            borderRadius: '8px',
-                            fontWeight: 600
-                        }}
-                    >
-                        <span style={{ fontSize: '1.25rem' }}>{language === 'pt-BR' ? '🇧🇷' : '🇺🇸'}</span>
-                        <span>{language === 'pt-BR' ? 'PT' : 'EN'}</span>
-                    </button>
+                    {/* Language Buttons */}
+                    <div className="lang-switcher">
+                        <button
+                            className={`lang-btn ${language === 'pt-BR' ? 'active' : ''}`}
+                            onClick={() => setLanguage('pt-BR')}
+                        >
+                            🇧🇷 Português
+                        </button>
+                        <button
+                            className={`lang-btn ${language === 'en-US' ? 'active' : ''}`}
+                            onClick={() => setLanguage('en-US')}
+                        >
+                            🇺🇸 English
+                        </button>
+                    </div>
 
                     <div className="header-user">
                         <div className="header-avatar">{user?.nome_empresa?.charAt(0).toUpperCase() || 'U'}</div>
