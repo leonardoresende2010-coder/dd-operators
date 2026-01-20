@@ -53,6 +53,15 @@ export const uploadAPI = {
 export const adminAPI = {
     async getOperadores() { const res = await fetchWithAuth('/admin/operadores'); return res.json(); },
     async getOperador(id) { const res = await fetchWithAuth(`/admin/operadores/${id}`); return res.json(); },
+    async createOperador(email, password, nome_empresa) {
+        const res = await fetchWithAuth('/admin/operadores', {
+            method: 'POST',
+            body: JSON.stringify({ email, password, nome_empresa })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        return data;
+    },
     async updateStatus(id, status) { const res = await fetchWithAuth(`/admin/operadores/${id}/status`, { method: 'PUT', body: JSON.stringify({ status }) }); return res.json(); },
     async getEstatisticas() { const res = await fetchWithAuth('/admin/estatisticas'); return res.json(); }
 };

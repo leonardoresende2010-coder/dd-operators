@@ -1,6 +1,7 @@
 import express from 'express';
 import path from 'path';
 import fs from 'fs';
+import bcrypt from 'bcryptjs';
 import { fileURLToPath } from 'url';
 import { query } from '../config/database.js';
 import { authenticateToken, requireAdmin } from '../middleware/auth.js';
@@ -13,6 +14,47 @@ const router = express.Router();
 // Todos as rotas requerem autenticação admin
 router.use(authenticateToken);
 router.use(requireAdmin);
+
+// POST /api/admin/operadores - Criar novo operador
+router.post('/operadores', async (req, res) => {
+    try {
+        const { email, password, nome_empresa } = req.body;
+
+        if (!email || !password || !nome_empresa) {
+            return res.status(400).json({ error: 'Email, senha e nome da empresa são obrigatórios' });
+        }
+
+        // Verificar se email já existe
+        const existingUser = await query('SELECT id FROM operadores WHERE email = $1', [email]);
+        if (existingUser.rows.length > 0) {
+            return res.status(400).json({ error: 'Email já cadastrado' });
+        }
+
+        // Hash da senha
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        // Criar operador
+        const result = await query(
+            'INSERT INTO operadores (email, password_hash, nome_empresa, is_admin, status) VALUES ($1, $2, $3, false, $4) RETURNING id, email, nome_empresa, status',
+            [email, hashedPassword, nome_empresa, 'ativo']
+        );
+
+        // Criar registro de respostas vazio
+        await query(
+            'INSERT INTO respostas_due_diligence (operador_id) VALUES ($1)',
+            [result.rows[0].id]
+        );
+
+        res.status(201).json({
+            success: true,
+            message: 'Operador criado com sucesso',
+            operador: result.rows[0]
+        });
+    } catch (error) {
+        console.error('Erro ao criar operador:', error);
+        res.status(500).json({ error: 'Erro ao criar operador' });
+    }
+});
 
 // GET /api/admin/operadores - Listar todos os operadores com status
 router.get('/operadores', async (req, res) => {

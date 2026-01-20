@@ -8,6 +8,10 @@ export default function AdminDashboard() {
     const [loading, setLoading] = useState(true);
     const [selectedOperador, setSelectedOperador] = useState(null);
     const [detalhes, setDetalhes] = useState(null);
+    const [showCreateModal, setShowCreateModal] = useState(false);
+    const [createForm, setCreateForm] = useState({ email: '', password: '', nome_empresa: '' });
+    const [creating, setCreating] = useState(false);
+    const [createError, setCreateError] = useState('');
 
     useEffect(() => { loadData(); }, []);
 
@@ -29,6 +33,22 @@ export default function AdminDashboard() {
     const toggleStatus = async (id, current) => {
         await adminAPI.updateStatus(id, current === 'ativo' ? 'inativo' : 'ativo');
         loadData();
+    };
+
+    const handleCreateOperador = async (e) => {
+        e.preventDefault();
+        setCreating(true);
+        setCreateError('');
+        try {
+            await adminAPI.createOperador(createForm.email, createForm.password, createForm.nome_empresa);
+            setShowCreateModal(false);
+            setCreateForm({ email: '', password: '', nome_empresa: '' });
+            loadData();
+        } catch (error) {
+            setCreateError(error.message);
+        } finally {
+            setCreating(false);
+        }
     };
 
     // Função para converter respostas em formato legível
@@ -120,9 +140,14 @@ export default function AdminDashboard() {
                         <h1>Dashboard Administrativo</h1>
                         <p style={{ color: 'var(--neutral-400)' }}>Gerencie operadores e visualize status</p>
                     </div>
-                    <button className="btn btn-primary" onClick={exportAllCSV}>
-                        📊 Exportar Finalizados (CSV)
-                    </button>
+                    <div style={{ display: 'flex', gap: '0.75rem' }}>
+                        <button className="btn btn-success" onClick={() => setShowCreateModal(true)}>
+                            ➕ Novo Operador
+                        </button>
+                        <button className="btn btn-primary" onClick={exportAllCSV}>
+                            📊 Exportar CSV
+                        </button>
+                    </div>
                 </div>
 
                 <div className="stats-grid">
@@ -218,6 +243,70 @@ export default function AdminDashboard() {
                                     )}
                                 </div>
                             ) : <div className="loading-spinner" style={{ margin: '2rem auto' }}></div>}
+                        </div>
+                    </div>
+                </div>
+            )}
+
+            {/* Modal Criar Operador */}
+            {showCreateModal && (
+                <div className="modal-overlay" onClick={() => { setShowCreateModal(false); setCreateError(''); }}>
+                    <div className="modal" style={{ maxWidth: 500 }} onClick={e => e.stopPropagation()}>
+                        <div className="modal-header">
+                            <h3 className="modal-title">➕ Novo Operador</h3>
+                            <button className="modal-close" onClick={() => { setShowCreateModal(false); setCreateError(''); }}>×</button>
+                        </div>
+                        <div className="modal-body">
+                            <form onSubmit={handleCreateOperador}>
+                                {createError && <div className="alert alert-danger"><span>⚠️</span><span>{createError}</span></div>}
+
+                                <div className="form-group">
+                                    <label className="form-label required">Nome da Empresa</label>
+                                    <input
+                                        type="text"
+                                        className="form-input"
+                                        placeholder="Empresa S.A."
+                                        value={createForm.nome_empresa}
+                                        onChange={(e) => setCreateForm({ ...createForm, nome_empresa: e.target.value })}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label required">Email</label>
+                                    <input
+                                        type="email"
+                                        className="form-input"
+                                        placeholder="operador@empresa.com"
+                                        value={createForm.email}
+                                        onChange={(e) => setCreateForm({ ...createForm, email: e.target.value })}
+                                        required
+                                    />
+                                </div>
+
+                                <div className="form-group">
+                                    <label className="form-label required">Senha</label>
+                                    <input
+                                        type="password"
+                                        className="form-input"
+                                        placeholder="Mínimo 6 caracteres"
+                                        value={createForm.password}
+                                        onChange={(e) => setCreateForm({ ...createForm, password: e.target.value })}
+                                        required
+                                        minLength={6}
+                                    />
+                                    <span className="form-hint">A senha será enviada ao operador</span>
+                                </div>
+
+                                <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+                                    <button type="button" className="btn btn-ghost" onClick={() => { setShowCreateModal(false); setCreateError(''); }}>
+                                        Cancelar
+                                    </button>
+                                    <button type="submit" className="btn btn-success" disabled={creating}>
+                                        {creating ? 'Criando...' : '✓ Criar Operador'}
+                                    </button>
+                                </div>
+                            </form>
                         </div>
                     </div>
                 </div>
